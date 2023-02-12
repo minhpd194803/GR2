@@ -10,15 +10,15 @@
                 Height
               </div>
               <div class="line"></div>
-              <div>
-                
+              <div v-if="isFetched">
+                {{ chainInfo.block.last_commit.height }}
               </div>
             </div>
           </el-col>
           <el-col :span="8">
             <div class="shadow content chain-info">
               <div>
-                
+                Staked
               </div>
               <div class="line"></div>
               <div>
@@ -45,35 +45,45 @@
 
 <script>
 import axios from 'axios';
-
   export default {
+    components:{
+      coingeckoCoinPriceChartWidget
+    },
     data(){
       return {
-        chainInfo:{}
+        chainInfo: null,
+        bondedTokens: null,
+        amountTokens: null,
+        isFetched: false,
+
       }
     },
     methods:{
-      getApi(){
-        axios('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/latest',{
-          method: 'get',
-        })
-          .then((response) => {
-            console.log(response)
-            this.chainInfo = response
-          })
-          .catch((response) => {
-            console.log(response)
-          }
-        )
+      async fetchChainData(){
+        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/latest')
+        this.chainInfo = res.data
+        this.isFetched = true
+      },
+      async getBondedToken(){
+        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/staking/v1beta1/pool')
+        this.bondedTokens = res.data.pool.bonded_tokens
+        console.log(this.bondedTokens)
+      },
+      async getAmountToken(){
+        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/bank/v1beta1/supply/uatom')
+        this.amountTokens = res.data.amount.amount
+        console.log(this.amountTokens)
       }
     },
     computed:{
-      chainHeight(){
-        return this.chainInfo.block.last_commit.height
-      }
+
     },
     created(){
-      this.getApi()
+       
+      this.fetchChainData()
+      this.getBondedToken()
+      this.getAmountToken()
+
     }
   }
 
