@@ -26,25 +26,10 @@
       }
     },  
     methods:{
-      printApi(){
-        axios('https://api.mintscan.io/v2/utils/market/prices?currency=usd', {
-          method: 'get', 
-          // headers: {
-          //   'Access-Control-Allow-Origin': 'http://localhost:3000/',
-          //   'Content-Type': 'application/json',
-          // },
-        })
-          .then((response) => {
-            console.log(response)
-          })
-          .catch((response) => {
-            console.log(response)
-          }
-        )
-      },
+      
     },
     mounted(){
-      this.printApi()
+
     }
   }
 </script>
