@@ -4,9 +4,8 @@
       GR2
     </div>
     <Navbar/>
-    <div>
-      <ChainInfo/>
-    </div>
+    <ChainInfo/>
+    <LatestTransactions/>
   </div>
 </template>
 
@@ -14,11 +13,13 @@
   import axios from 'axios';
   import Navbar from '../Navbar/Navbar.vue';
   import ChainInfo from './chainInfo/ChainInfo.vue';
+  import LatestTransactions from '../latestTransactions/LatestTransactions.vue';
 
   export default {
     components:{
       Navbar,
-      ChainInfo
+      ChainInfo,
+      LatestTransactions,
     },
     data(){
       return {
