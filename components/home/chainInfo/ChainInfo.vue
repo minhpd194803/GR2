@@ -67,7 +67,6 @@ import axios from 'axios';
       async fetchPrice(){
         const res = await axios.get('https://proxy.atomscan.com/prices')
         this.chainPrice = res.data
-        console.log(this.chainPrice)
       },
       async fetchChainData(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/latest')
