@@ -73,10 +73,9 @@ import axios from 'axios';
             }
           })
           tempData.totalAmount = this.convertAmountOfTokens(total) 
-          tempData.since = 'hehe'
+          tempData.since = this.checkTimeSince(data.Time)
           this.tableData.push(tempData)
         })
-        console.log(this.tableData)
       },
       convertLongData(data){
         let temp = ''
@@ -94,6 +93,28 @@ import axios from 'axios';
       convertAmountOfTokens(amount){
         return (amount/1000000).toFixed(6) + ' ATOM'
       },
+      checkTimeSince(time){
+        const currentHour = new Date().getUTCHours()
+        const currentMinute = new Date().getUTCMinutes()
+        const currentSecond = new Date().getUTCSeconds()
+        const transactionTime = time.slice(11,19)
+        const transactionHour = parseInt(transactionTime.slice(0,2))
+        const transactionMinute = parseInt(transactionTime.slice(3,5))
+        const transactionSecond = parseInt(transactionTime.slice(6,8))
+        const timeSinceTransaction = 3600*(currentHour - transactionHour) 
+          + 60*(currentMinute - transactionMinute) 
+          + (currentSecond - transactionSecond)
+
+        if ( timeSinceTransaction > 3600 ){
+          return parseInt(timeSinceTransaction/3600) + ' hours ago'
+        }
+        else if ( timeSinceTransaction > 60 ){
+          return parseInt(timeSinceTransaction/60) + ' minutes ago'
+        }
+        else {
+          return timeSinceTransaction + ' second ago'
+        }
+      }
     },
     created(){
       let fetchApi = async () => {

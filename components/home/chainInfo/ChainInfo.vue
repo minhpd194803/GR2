@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import axios from 'axios';
   export default {
     components:{
@@ -75,6 +76,7 @@ import axios from 'axios';
       async getBondedToken(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/staking/v1beta1/pool')
         this.bondedTokens = res.data.pool.bonded_tokens / 1000000
+        this.setBondedTokens(this.bondedTokens)
       },
       async getAmountToken(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/bank/v1beta1/supply/uatom')
@@ -95,6 +97,7 @@ import axios from 'axios';
       toPercentage(Number){
         return (Number * 100).toFixed(2) + '%'
       },
+      ...mapActions(['setBondedTokens'])
     },
     computed:{
       stakedPercentage() {
@@ -120,8 +123,8 @@ import axios from 'axios';
     },
     created(){
       let fetchData = async () => {
-        await this.fetchChainData()
         await this.getBondedToken()
+        await this.fetchChainData()
         await this.getAmountToken()
         await this.getInflation()
         await this.fetchPrice()
