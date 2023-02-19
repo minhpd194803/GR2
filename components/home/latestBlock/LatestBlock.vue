@@ -47,7 +47,6 @@ import axios from 'axios';
     methods:{
       async fetchLatestBlocks(){
         const res = await axios.get('https://cosmos.rpc.atomscan.com/blockchain?page=')
-        console.log(res)
         this.apiData = res.data.result.block_metas
       },
       convertToTableData(){
@@ -57,7 +56,6 @@ import axios from 'axios';
           tempData.proposer = this.convertLongData(data.header.proposer_address)
           tempData.txs = data.num_txs
           tempData.since = this.checkTimeSince(data.header.time)
-          console.log(tempData)
           this.tableData.push(tempData)
         })
       },
