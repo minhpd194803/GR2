@@ -1,24 +1,27 @@
 <template>
   <div>
-    <NavBar :activeIndex="3"/>
+    <Navbar :activeIndex="'3'" />
     <h1>{{ block }}</h1>
     <BlockDetails :block="block"/>
+    <BlockTransactions :block="block"/>
   </div>
 </template>
 
 <script>
-import BlockDetails from '../../components/blocksPage/BlockDetails.vue'
-import Navbar from '../../components/Navbar/Navbar.vue'
+import BlockDetails from '../../components/blocksPage/BlockDetails.vue';
+import Navbar from '../../components/Navbar/Navbar.vue';
+import BlockTransactions from '../../components/blocksPage/blockTransactions/BlockTransactions.vue';
+
 export default {
   async asyncData({ params }) {
-    console.log(params)
     const block = params.block 
     return { block }
   },
   name: 'Transactions',
   components: {
     BlockDetails,
-    NavBar,
+    Navbar,
+    BlockTransactions,
   },
 }
 </script>

@@ -77,7 +77,7 @@ export default {
     convertToTableData() {
       // TO-DO
       this.tableData[0].data = this.apiData.tx_response.txhash
-      this.tableData[1].data = this.convertdate(this.apiData.timestamp)
+      this.tableData[1].data = this.convertdate(this.apiData.tx_response.timestamp)
       this.tableData[2].data = this.apiData.tx_response.code == 0 
         ? 'success' 
         : this.apiData.tx_response.raw_log
@@ -101,11 +101,12 @@ export default {
     getTotal(){
       let amount = 0
       this.apiData.tx_response.logs.forEach((log) => {
-        log.forEach((evnt) => {
+        log.events.forEach((evnt) => {
           if(evnt.type === 'coin_received') 
-            amount += parseFloat(evnt.attributes[1].value.slice(0,5))
+            amount += parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5)/1000000)
         })
       })
+      console.log(amount)
       return amount
     }
   },

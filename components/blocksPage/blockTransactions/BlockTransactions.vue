@@ -59,26 +59,41 @@ export default {
     convertToTableData(){
       this.apiData.forEach((tx) => {
         let tempData = {}
+        tempData.type = null
         let totalAmount = 0
         tempData.hash = this.convertLongData(tx.txhash)
-        if (tx.logs.length > 1) tx.logs.forEach((log) => {
+        if (tx.logs.length > 1) {
           tempData.type = 'multiple'
           tempData.from = '--'
           tempData.to = '--'
-          log.forEach((evnt) => {
-            if(evnt.type === 'coin_spent') 
-              totalAmount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
+          tx.logs.forEach((log) => {
+            if(log.events.length > 0) log.events.forEach((evnt) => {
+              if(evnt.type === 'coin_spent') 
+                totalAmount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
+            })
           })
-        })
+        }
         else {
-          tx.logs[0].forEach((evnt) => {
+          if (tx.logs[0].events.length > 0) tx.logs[0].events.forEach((evnt) => {
             if(evnt.type === 'proposal_vote') {
               tempData.type = 'Vote'
-              const option = evnt.attributes[0].option == 1 ? 'Yes' : 'No'
+              let option = ''
+              switch(JSON.parse(evnt.attributes[0].value).option){
+                case 1: 
+                  option = 'Yes'
+                  break;
+                case 2:
+                  option = 'Abstain'
+                  break;
+                case 3:
+                  option = 'No'
+                  break;
+                default: 
+              }
               tempData.to = option + ' on #' + evnt.attributes[1].value
             }
             if(evnt.type === 'message' && evnt.attributes[0].value.includes('MsgVote')){
-              tempData.to = this.convertLongData(evnt.attributes[2].value)
+              tempData.from = this.convertLongData(evnt.attributes[2].value)
             }
             if(evnt.type === 'delegate') tempData.type = 'Delegate'
             if(evnt.type === 'withdraw_rewards') tempData.type = 'Withdraw Rewards'
@@ -91,9 +106,9 @@ export default {
             if(evnt.type === 'coin_received') tempData.to = this.convertLongData(evnt.attributes[0].value)
           })
         }
-
         tempData.totalAmount = this.convertAmountOfTokens(totalAmount)
-        tempData.since = this.checkTimeSince(tx.timestamp.slice(0,10))
+        tempData.since = this.checkTimeSince(tx.timestamp)
+        if(tempData.type === null) tempData.type = 'Send'
         this.tableData.push(tempData)
       })
     },

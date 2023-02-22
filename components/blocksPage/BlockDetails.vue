@@ -60,18 +60,15 @@ export default {
     async fetchBlock() {
       const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/' + this.block)
       this.apiData = res.data
-      console.log(this.apiData)
     },
-    convertToTableData() {
+    async convertToTableData() {
       this.tableData[0].data = this.convertdate(this.apiData.block.header.time)
       this.tableData[1].data = this.block
       let temp = []
       temp = this.apiData.block.data.txs
       this.tableData[2].data = temp.length
-      this.tableData[3].data = this.sha256(this.apiData.block_id.hash)
-      console.log(this.tableData[3].data)
-      this.tableData[4].data = this.sha256(this.apiData.block.header.validators_hash)    
-      console.log(this.tableData[4].data)
+      this.tableData[3].data = await this.sha256(this.apiData.block_id.hash)
+      this.tableData[4].data = await this.sha256(this.apiData.block.header.validators_hash)   
     },
     convertdate(data) {
       let temp = ''
@@ -97,7 +94,7 @@ export default {
   created() {
     let fetchApi = async () => {
       await this.fetchBlock()
-      this.convertToTableData()
+      await this.convertToTableData()
       this.isFetched = true
     }
     fetchApi()
