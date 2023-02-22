@@ -3,7 +3,7 @@
     <div>
       GR2
     </div>
-    <Navbar/>
+    <Navbar :active-index="1"/>
     <ChainInfo/>
     <LatestTransactions/>
     <Validators/>

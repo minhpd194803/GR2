@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar :activeIndex="3"/>
     <h1>{{ block }}</h1>
     <BlockDetails :block="block"/>
   </div>
@@ -7,7 +8,7 @@
 
 <script>
 import BlockDetails from '../../components/blocksPage/BlockDetails.vue'
-
+import Navbar from '../../components/Navbar/Navbar.vue'
 export default {
   async asyncData({ params }) {
     console.log(params)
@@ -17,6 +18,7 @@ export default {
   name: 'Transactions',
   components: {
     BlockDetails,
+    NavBar,
   },
 }
 </script>

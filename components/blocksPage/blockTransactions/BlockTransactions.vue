@@ -59,7 +59,7 @@ export default {
     convertToTableData(){
       this.apiData.forEach((tx) => {
         let tempData = {}
-        let amount = 0
+        let totalAmount = 0
         tempData.hash = this.convertLongData(tx.txhash)
         if (tx.logs.length > 1) tx.logs.forEach((log) => {
           tempData.type = 'multiple'
@@ -67,23 +67,34 @@ export default {
           tempData.to = '--'
           log.forEach((evnt) => {
             if(evnt.type === 'coin_spent') 
-              amount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
+              totalAmount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
           })
-          tempData.totalAmount = this.convertAmountOfTokens(amount)
-          tempData.since = this.checkTimeSince(tx.timeStamp)
         })
         else {
           tx.logs[0].forEach((evnt) => {
-            if(evnt.type === 'proposal_vote') tempData.type = 'vote'
-            if(evnt.type === 'delegate') tempData.type = 'delegate'
-            if(evnt.type === 'withdraw_rewards') tempData.type = 'withdraw_rewards'
+            if(evnt.type === 'proposal_vote') {
+              tempData.type = 'Vote'
+              const option = evnt.attributes[0].option == 1 ? 'Yes' : 'No'
+              tempData.to = option + ' on #' + evnt.attributes[1].value
+            }
+            if(evnt.type === 'message' && evnt.attributes[0].value.includes('MsgVote')){
+              tempData.to = this.convertLongData(evnt.attributes[2].value)
+            }
+            if(evnt.type === 'delegate') tempData.type = 'Delegate'
+            if(evnt.type === 'withdraw_rewards') tempData.type = 'Withdraw Rewards'
+            if(evnt.type === 'update_client') tempData.type = 'Update Client'
+            if(evnt.type === 'ibc_transfer') tempData.type = 'IBC Transfer'
             if(evnt.type === 'coin_spent') {
-              amount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
+              totalAmount+=parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5))
               tempData.from = this.convertLongData(evnt.attributes[0].value)
             }
             if(evnt.type === 'coin_received') tempData.to = this.convertLongData(evnt.attributes[0].value)
           })
         }
+
+        tempData.totalAmount = this.convertAmountOfTokens(totalAmount)
+        tempData.since = this.checkTimeSince(tx.timestamp.slice(0,10))
+        this.tableData.push(tempData)
       })
     },
 
