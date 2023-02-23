@@ -1,8 +1,13 @@
 <template>
-  <div>
-    <el-container>
-      <el-header>Validators</el-header>
-      <el-main>
+  <el-container>
+    <el-header style="height: 20px;">
+      <span style="color:purple; font-size: 1.5em;">
+        <i class="el-icon-s-custom"></i>
+        Validators
+      </span>
+    </el-header>
+    <el-main>
+      <transition name="el-zoom-in-top">
         <el-table
           v-if="isFetched"
           :data="tableData"
@@ -12,12 +17,11 @@
           <el-table-column
             prop="name"
             label="Name"
-            width="180">
+            width="200px">
           </el-table-column>
           <el-table-column
             prop="commission"
-            label="Commission"
-            width="180">
+            label="Commission">
           </el-table-column>
           <el-table-column
             prop="delegations"
@@ -28,9 +32,9 @@
             label="Power">
           </el-table-column>
         </el-table>
-      </el-main>
-    </el-container>
-  </div>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script>

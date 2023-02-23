@@ -1,13 +1,18 @@
 <template>
   <div>
-    <div>
-      GR2
-    </div>
-    <Navbar :active-index="1"/>
+    <Navbar :active-index="'1'"/>
     <ChainInfo/>
-    <LatestTransactions/>
-    <Validators/>
-    <LatestBlock/>
+      <div class="table-border table-width-almost-full" >
+        <LatestTransactions/>
+      </div>
+      <div class="flex">
+        <div class="table-border table-width-full">
+          <Validators/>
+        </div>
+        <div class="table-border table-width-full">
+          <LatestBlock/>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -28,3 +33,22 @@
     },
   }
 </script>
+
+<style>
+.table-border{
+  padding-top: 10px;
+  margin: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+}
+.table-width-full{
+  width: 100%
+}
+.table-width-almost-full{
+  width: calc(100%-40px)
+}
+.flex{
+  display: flex;
+  flex-direction: row;
+}
+</style>

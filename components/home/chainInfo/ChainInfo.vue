@@ -1,17 +1,33 @@
 <template>
-  <div>
+  <transition name=".el-fade-in-linear">
     <el-container v-if="isFetched">
-      <el-header>{{ chainName }}</el-header>
       <el-main>
-        <el-row>
-          <div class="shadow content row"> {{ generalInfoWidget }}</div>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <div class="shadow small-content row align-center">
+              <img src="https://atomscan.com/img/icons/chains/atom.svg" class="icon">
+              {{ chainName }}
+            </div>
+          </el-col>
+          <el-col :span="18" class="shadow small-content row align-center">
+            <div>
+              {{ getPrice }}
+            </div>
+            <div>
+              {{ getInflation }}
+            </div>
+            <div>
+              {{ getBondedTokens }}
+            </div>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
             <div class="shadow content column">
-              <div>
+              <span style="color:green; font-size: 1.5em;">
+                <i class="el-icon-s-grid"></i>
                 Height
-              </div>
+              </span>
               <div class="line"></div>
               <div>
                 {{ chainInfo.block.last_commit.height }}
@@ -20,9 +36,10 @@
           </el-col>
           <el-col :span="8">
             <div class="shadow content column">
-              <div>
+              <span style="color:blue; font-size: 1.5em;">
+                <i class="el-icon-bank-card"></i>
                 Staked
-              </div>
+              </span>
               <div class="line"></div>
               <div>
                 {{ stakeWidget }}
@@ -31,9 +48,10 @@
           </el-col>
           <el-col :span="8">
             <div class="shadow content column">
-              <div>
+              <span style="color:red; font-size: 1.5em;">
+                <i class="el-icon-data-line"></i>
                 Inflation
-              </div>
+              </span>
               <div class="line"></div>
               <div>
                 {{ inflationWidget }}
@@ -43,7 +61,8 @@
         </el-row>
       </el-main>
     </el-container>
-  </div>
+  </transition>
+  
 </template>
 
 <script>
@@ -73,16 +92,16 @@ import axios from 'axios';
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/latest')
         this.chainInfo = res.data
       },
-      async getBondedToken(){
+      async fetchBondedToken(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/staking/v1beta1/pool')
         this.bondedTokens = res.data.pool.bonded_tokens / 1000000
         this.setBondedTokens(this.bondedTokens)
       },
-      async getAmountToken(){
+      async fetchAmountToken(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/bank/v1beta1/supply/uatom')
         this.amountTokens = res.data.amount.amount / 1000000
       },
-      async getInflation(){
+      async fetchInflation(){
         const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/mint/v1beta1/inflation')
         this.inflation = res.data.inflation
       },
@@ -104,7 +123,7 @@ import axios from 'axios';
         return this.toPercentage(this.bondedTokens/this.amountTokens)
       },
       getCurrentChainPrice(){
-        return 0
+        return this.chainPrice.atom.price.toFixed(2)
       },
       stakeWidget(){
         const amountTokens = this.convertBigNumber(this.amountTokens)
@@ -114,19 +133,24 @@ import axios from 'axios';
       inflationWidget(){
         return this.toPercentage(this.inflation)
       },
-      generalInfoWidget(){
+      getPrice(){
         return 'Price: ' + this.getCurrentChainPrice + '$'
-          + 'Inflation: ' + this.inflationWidget 
-          + 'Bonded: ' + this.convertBigNumber(this.bondedTokens) 
-          + '(' + this.stakedPercentage + ')'
       },
+      getInflation(){
+        return 'Inflation: ' + this.inflationWidget 
+      },
+      getBondedTokens(){
+        return 'Bonded: ' 
+          + this.convertBigNumber(this.bondedTokens) 
+          + '(' + this.stakedPercentage + ')'
+      }
     },
     created(){
       let fetchData = async () => {
-        await this.getBondedToken()
+        await this.fetchBondedToken()
         await this.fetchChainData()
-        await this.getAmountToken()
-        await this.getInflation()
+        await this.fetchAmountToken()
+        await this.fetchInflation()
         await this.fetchPrice()
         this.isFetched = true
       }
@@ -138,19 +162,37 @@ import axios from 'axios';
 </script>
 
 <style scoped>
+  .small-content{
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+  }
   .content{
-    height: 100px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 80px;
   }
   .shadow{
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
   .column{
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
   }
   .row{
     display: flex;
     flex-direction: row;
+  }
+  .align-center{
+    justify-content: space-evenly; 
+    align-items: center;
+  }
+  .icon{
+    height: 24px;
+    width: 24px;
   }
 
 </style>

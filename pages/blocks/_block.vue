@@ -1,7 +1,6 @@
 <template>
   <div>
     <Navbar :activeIndex="'3'" />
-    <h1>{{ block }}</h1>
     <BlockDetails :block="block"/>
     <BlockTransactions :block="block"/>
   </div>

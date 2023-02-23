@@ -1,23 +1,29 @@
 <template>
-  <div>
-    <el-container>
-      <el-header>Latest Blocks</el-header>
-      <el-main>
+  <el-container>
+    <el-header style="height: 20px;">
+      <span style="color:gold; font-size: 1.5em;">
+        <i class="el-icon-files"></i>
+        Latest Blocks
+      </span>
+    </el-header>
+    <el-main>
+      <transition name="el-zoom-in-top">
         <el-table
           v-if="this.isFetched"
           :data="tableData"
           stripe
           style="width: 100%"
+          highlight-current-row
+          @current-change="handleCurrentChange"
         >
           <el-table-column
             prop="height"
             label="Height"
-            width="180">
+            width="200px">
           </el-table-column>
           <el-table-column
             prop="proposer"
-            label="Proposer Hash"
-            width="180">
+            label="Proposer Hash">
           </el-table-column>
           <el-table-column
             prop="txs"
@@ -28,9 +34,9 @@
             label="Since">
           </el-table-column>
         </el-table>
-      </el-main>
-    </el-container>
-  </div>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -93,7 +99,14 @@ import axios from 'axios';
         else {
           return timeSinceTransaction + ' second ago'
         }
+      },
+      handleCurrentChange(event){
+        console.log(event)
+      },
+      handleCurrentChange(event){
+        location.replace("http://localhost:3000/blocks/" + event.height)
       }
+      
     },
     created(){
       let fetchApi = async () => {

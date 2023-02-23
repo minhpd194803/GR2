@@ -1,38 +1,42 @@
 <template>
-<div>
-    <el-table
-      v-if="this.isFetched"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column
-        prop="hash"
-        label="Hash"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="type"
-        label="Type"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="from"
-        label="From">
-      </el-table-column>
-      <el-table-column
-        prop="to"
-        label="To">
-      </el-table-column>
-      <el-table-column
-        prop="totalAmount"
-        label="TotalAmount">
-      </el-table-column>
-      <el-table-column
-        prop="since"
-        label="Since">
-      </el-table-column>
-    </el-table>
+  <div class="table-border">
+    <transition name="el-zoom-in-top">
+      <el-table
+        v-show="this.isFetched"
+        :data="tableData"
+        stripe
+        style="width: 100%"
+        highlight-current-row
+        @current-change="handleCurrentChange"
+      >
+        <el-table-column
+          prop="hash"
+          label="Hash"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          label="Type"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="from"
+          label="From">
+        </el-table-column>
+        <el-table-column
+          prop="to"
+          label="To">
+        </el-table-column>
+        <el-table-column
+          prop="totalAmount"
+          label="TotalAmount">
+        </el-table-column>
+        <el-table-column
+          prop="since"
+          label="Since">
+        </el-table-column>
+      </el-table>
+    </transition>
   </div>
 </template>
 
@@ -62,6 +66,7 @@ export default {
         tempData.type = null
         let totalAmount = 0
         tempData.hash = this.convertLongData(tx.txhash)
+        tempData.fullHash = tx.txhash
         if (tx.logs.length > 1) {
           tempData.type = 'multiple'
           tempData.from = '--'
@@ -150,7 +155,10 @@ export default {
       else {
         return timeSinceTransaction + ' second ago'
       }
-    }
+    },
+      handleCurrentChange(event){
+        location.replace("http://localhost:3000/transactions/" + event.fullHash)
+      }
   },
   created(){
     let fetchApi = async () => {
@@ -164,6 +172,15 @@ export default {
 
 </script>
 
-<style>
-
+<style scoped>
+.el-table__header-wrapper{
+  height: 60px;
+}
+.table-border{
+  width: calc(100%-60px);
+  padding: 10px;
+  margin: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+}
 </style>

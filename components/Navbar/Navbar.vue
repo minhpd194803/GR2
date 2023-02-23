@@ -15,8 +15,8 @@
       'activeIndex'
     ],
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+      handleSelect(key) {
+        if(key == 1) location.replace("http://localhost:3000")
       }
     }
   }

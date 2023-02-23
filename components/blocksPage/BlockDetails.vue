@@ -1,22 +1,30 @@
 <template>
-  <div>
+  <div class="table-border">
     <el-container>
-      <el-header>Block Details</el-header>
+      <el-header style="height:20px;">
+        <span style="color:gold; font-size: 1.5em;">
+          <i class="el-icon-files"></i>
+          Block Details
+        </span>
+      </el-header>
+      <div class="line"></div>
       <el-main>
-        <el-table
-          v-if="this.isFetched"
-          :data="tableData"
-          stripe
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="category"
-            width="300">
-          </el-table-column>
-          <el-table-column
-            prop="data">
-          </el-table-column>
-        </el-table>
+        <transition name="el-zoom-in-top">
+          <el-table
+            v-show="this.isFetched"
+            :data="tableData"
+            stripe
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="category"
+              width="300">
+            </el-table-column>
+            <el-table-column
+              prop="data">
+            </el-table-column>
+          </el-table>
+        </transition>
       </el-main>
     </el-container>
   </div>
@@ -103,5 +111,14 @@ export default {
 </script>
 
 <style scoped>
-
+.table-border{
+  width: calc(100%-60px);
+  padding: 10px;
+  margin: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+}
+.el-table__header-wrapper{
+  height: 0px;
+}
 </style>

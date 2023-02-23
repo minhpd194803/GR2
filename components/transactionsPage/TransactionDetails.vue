@@ -1,10 +1,15 @@
 <template>
-  <div>
-    <el-container>
-      <el-header>Block Details</el-header>
-      <el-main>
+  <el-container class="table-border">
+    <el-header style="height: 20px;">
+      <span style="color:green; font-size: 1.5em;">
+        <i class="el-icon-money"></i>
+        Transaction
+      </span>
+    </el-header>
+    <el-main>
+      <transition name="el-zoom-in-top">
         <el-table
-          v-if="this.isFetched"
+          v-show="this.isFetched"
           :data="tableData"
           stripe
           style="width: 100%"
@@ -17,9 +22,9 @@
             prop="data">
           </el-table-column>
         </el-table>
-      </el-main>
-    </el-container>
-  </div>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -108,6 +113,9 @@ export default {
       })
       console.log(amount)
       return amount
+    },
+    redirectTransaction(){
+      
     }
   },
   created() {
@@ -117,10 +125,19 @@ export default {
       this.isFetched = true
     }
     fetchApi()
-  }
+  },
 }
 </script>
 
 <style scoped>
-
+.table-border{
+  width: calc(100%-60px);
+  padding: 10px;
+  margin: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+}
+.el-table__header-wrapper{
+  height: 0px;
+}
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div>
     <Navbar :active-index="'2'"/>
-    <h1>{{ transactionHash }}</h1>
     <TransactionDetails :transactionHash="transactionHash" />
   </div>
 </template>

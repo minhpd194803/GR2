@@ -1,39 +1,49 @@
 <template>
-  <div>
-    <el-table
-      v-if="this.isFetched"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column
-        prop="hash"
-        label="Hash"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="type"
-        label="Type"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="from"
-        label="From">
-      </el-table-column>
-      <el-table-column
-        prop="to"
-        label="To">
-      </el-table-column>
-      <el-table-column
-        prop="totalAmount"
-        label="TotalAmount">
-      </el-table-column>
-      <el-table-column
-        prop="since"
-        label="Since">
-      </el-table-column>
-    </el-table>
-  </div>
+  <el-container>
+    <el-header style="height: 20px;">
+      <span style="color:green; font-size: 1.5em;">
+        <i class="el-icon-money"></i>
+        Latest Transactions
+      </span>
+    </el-header>
+    <el-main> 
+      <transition name="el-zoom-in-top">
+        <el-table
+          v-show="this.isFetched"
+          :data="tableData"
+          stripe
+          style="width: 100%"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+        >
+          <el-table-column
+            prop="hash"
+            label="Hash">
+          </el-table-column>
+          <el-table-column
+            prop="type"
+            label="Type">
+          </el-table-column>
+          <el-table-column
+            prop="from"
+            label="From">
+          </el-table-column>
+          <el-table-column
+            prop="to"
+            label="To">
+          </el-table-column>
+          <el-table-column
+            prop="totalAmount"
+            label="TotalAmount">
+          </el-table-column>
+          <el-table-column
+            prop="since"
+            label="Since">
+          </el-table-column>
+        </el-table>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -56,6 +66,7 @@ import axios from 'axios';
         this.apiData.forEach((data) => {
           let tempData = {}
           tempData.hash = this.convertLongData(data.Hash)
+          tempData.fullHash = data.Hash
           if(data.Messages.length > 1){
             tempData.type = 'multiple'
             tempData.from = '--'
@@ -65,6 +76,7 @@ import axios from 'axios';
             tempData.type = data.Messages[0].Type.Text
             tempData.from = this.convertLongData(data.Messages[0].From)
             tempData.to = this.convertLongData(data.Messages[0].To)
+            if(tempData.type == 'Vote') tempData.to = data.Messages[0].Voted + ' to #' + data.Messages[0].Proposal
           }
           let total = 0
           data.Messages.forEach((message) => {
@@ -114,6 +126,9 @@ import axios from 'axios';
         else {
           return timeSinceTransaction + ' second ago'
         }
+      },
+      handleCurrentChange(event){
+        location.replace("http://localhost:3000/transactions/" + event.fullHash)
       }
     },
     created(){
