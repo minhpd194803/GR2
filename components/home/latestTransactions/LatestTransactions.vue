@@ -6,7 +6,7 @@
         Latest Transactions
       </span>
     </el-header>
-    <el-main> 
+    <el-main style="cursor:pointer;"> 
       <transition name="el-zoom-in-top">
         <el-table
           v-show="this.isFetched"

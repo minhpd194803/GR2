@@ -12,7 +12,7 @@
           v-if="this.isFetched"
           :data="tableData"
           stripe
-          style="width: 100%"
+          style="width: 100%; cursor: pointer;"
           highlight-current-row
           @current-change="handleCurrentChange"
         >

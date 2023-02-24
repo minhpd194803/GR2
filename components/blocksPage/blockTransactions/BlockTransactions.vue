@@ -5,7 +5,7 @@
         v-show="this.isFetched"
         :data="tableData"
         stripe
-        style="width: 100%"
+        style="width: 100%; cursor: pointer;"
         highlight-current-row
         @current-change="handleCurrentChange"
       >
@@ -78,7 +78,7 @@ export default {
             })
           })
         }
-        else {
+        else if (tx.logs.length > 1) {
           if (tx.logs[0].events.length > 0) tx.logs[0].events.forEach((evnt) => {
             if(evnt.type === 'proposal_vote') {
               tempData.type = 'Vote'
@@ -110,6 +110,11 @@ export default {
             }
             if(evnt.type === 'coin_received') tempData.to = this.convertLongData(evnt.attributes[0].value)
           })
+        }
+        else {
+          tempData.from = '--'
+          tempData.to = '--'
+          tempData.type = 'Failed'
         }
         tempData.totalAmount = this.convertAmountOfTokens(totalAmount)
         tempData.since = this.checkTimeSince(tx.timestamp)
