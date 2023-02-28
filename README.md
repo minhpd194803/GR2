@@ -1,6 +1,8 @@
 # gr2
 
-## Build Setup
+This was a small project for the course graduation research 2, inspired by the explorer atomscan.
+
+## how to run the code
 
 ```bash
 # install dependencies
@@ -8,62 +10,26 @@ $ npm install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+## frontend
 
-## Special Directories
+the project was made using vuejs accompanied with a nuxtjs framework. Here, nuxtjs works as a navigator to guide the user through pages. 
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+This project presents a basic explorer for the chain cosmos, minor changes to this project could make it explore more chains if necessary. The work currently shows the latest blocks, latest transactions and top validators. upon clicking any block or transaction, the page transitions to their respective details. to navigate back home, there is a navbar above to indicate where the user is at.
 
-### `assets`
+## backend
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+The backend of this explorer was provided by coingecko and atomscans.
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+## future improvements
 
-### `components`
+The navbar currently exist only to navigate back home, it cannot navigate anywhere else, this could be solved with a simple search engine to look for other transactions or blocks. 
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
+The validators at the moment has no details and upon clicking does nothing at all. The validators detail page could be the next functional improvement.
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
+Currently, the only chain that is incoperated is cosmos. To get more chains, the project only needs to have a few minor changes but time consuming effort to reach.
 
-### `layouts`
+coinGecko provides alot of api and functional graphs which could be exploited to make the explorer more appealing to the eye, expecially the graphs.
 
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+Lastly, the website is a little bit clunky, it would be much better if more animations would slide things in.
