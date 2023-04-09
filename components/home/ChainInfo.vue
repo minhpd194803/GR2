@@ -5,7 +5,7 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <div class="shadow small-content row align-center">
-              <img src="https://atomscan.com/img/icons/chains/atom.svg" class="icon">
+              <img :src="getIcon" class="icon">
               {{ chainName }}
             </div>
           </el-col>
@@ -74,7 +74,7 @@ import axios from 'axios';
     },
     data(){
       return {
-        chainName: 'Cosmos',
+        chainName: 'Injective',
         chainInfo: null,
         bondedTokens: 1,
         amountTokens: 1,
@@ -89,20 +89,20 @@ import axios from 'axios';
         this.chainPrice = res.data
       },
       async fetchChainData(){
-        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/latest')
+        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/base/tendermint/v1beta1/blocks/latest`)
         this.chainInfo = res.data
       },
       async fetchBondedToken(){
-        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/staking/v1beta1/pool')
-        this.bondedTokens = res.data.pool.bonded_tokens / 1000000
+        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/staking/v1beta1/pool`)
+        this.bondedTokens = res.data.pool.bonded_tokens / this.chainDiffrence.unitDivision
         this.setBondedTokens(this.bondedTokens)
       },
       async fetchAmountToken(){
-        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/bank/v1beta1/supply/uatom')
-        this.amountTokens = res.data.amount.amount / 1000000
+        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/bank/v1beta1/supply/${this.chainDiffrence.unit}`)
+        this.amountTokens = res.data.amount.amount / this.chainDiffrence.unitDivision
       },
       async fetchInflation(){
-        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/mint/v1beta1/inflation')
+        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/mint/v1beta1/inflation`)
         this.inflation = res.data.inflation
       },
       convertBigNumber(number){
@@ -123,7 +123,8 @@ import axios from 'axios';
         return this.toPercentage(this.bondedTokens/this.amountTokens)
       },
       getCurrentChainPrice(){
-        return this.chainPrice.atom.price.toFixed(2)
+        if (this.chainName === 'Injective') return this.chainPrice.inj.price.toFixed(2)
+        if (this.chainName === 'Cosmos') return this.chainPrice.atom.price.toFixed(2)
       },
       stakeWidget(){
         const amountTokens = this.convertBigNumber(this.amountTokens)
@@ -143,6 +144,32 @@ import axios from 'axios';
         return 'Bonded: ' 
           + this.convertBigNumber(this.bondedTokens) 
           + '(' + this.stakedPercentage + ')'
+      },
+      getIcon(){
+        if (this.chainName === "Cosmos"){
+          return 'https://atomscan.com/img/icons/chains/atom.svg'
+        }
+        else if (this.chainName === "Injective"){
+          return 'https://atomscan.com/img/icons/chains/injective.png'
+        }
+      },
+      chainDiffrence(){
+        if (this.chainName === "Cosmos"){
+          return {
+            firstLink: 'cosmos.lcd',
+            secondLink: '',
+            unit: 'uatom',
+            unitDivision: 1000000,
+          }
+        }
+        if (this.chainName === "Injective"){
+          return {
+            firstLink: 'proxy',
+            secondLink: '/inj-lcd',
+            unit: 'inj',
+            unitDivision: 1000000000000000000,
+          }
+        }
       }
     },
     created(){

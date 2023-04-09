@@ -18,10 +18,10 @@
 
 <script>
   import Navbar from '../components/Navbar/Navbar.vue';
-  import ChainInfo from '../components/home/chainInfo/ChainInfo.vue';
-  import LatestTransactions from '../components/home/latestTransactions/LatestTransactions.vue';
-  import Validators from '../components/home/validators/Validators.vue';
-  import LatestBlock from '../components/home/latestBlock/LatestBlock.vue';
+  import ChainInfo from '../components/home/ChainInfo.vue';
+  import LatestTransactions from '../components/home/LatestTransactions.vue';
+  import Validators from '../components/home/Validators.vue';
+  import LatestBlock from '../components/home/LatestBlock.vue';
   export default {
     name: 'IndexPage',
     components: {

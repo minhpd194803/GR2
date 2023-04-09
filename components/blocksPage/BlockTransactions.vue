@@ -78,7 +78,7 @@ export default {
             })
           })
         }
-        else if (tx.logs.length > 1) {
+        else if (tx.logs.length == 1) {
           if (tx.logs[0].events.length > 0) tx.logs[0].events.forEach((evnt) => {
             if(evnt.type === 'proposal_vote') {
               tempData.type = 'Vote'

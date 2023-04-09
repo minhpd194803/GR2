@@ -77,7 +77,6 @@ export default {
     async fetchTransaction() {
       const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/tx/v1beta1/txs/' + this.transactionHash)
       this.apiData = res.data
-      console.log(this.apiData)
     },
     convertToTableData() {
       // TO-DO
@@ -107,11 +106,20 @@ export default {
       let amount = 0
       this.apiData.tx_response.logs.forEach((log) => {
         log.events.forEach((evnt) => {
-          if(evnt.type === 'coin_received') 
-            amount += parseFloat(evnt.attributes[1].value.slice(0,evnt.attributes[1].value.length-5)/1000000)
+          console.log('event')
+          if(evnt.type === 'coin_received' || evnt.type === 'fungible_token_packet') {
+            evnt.attributes.forEach((atrb) => {
+              console.log('hehe')
+              if(atrb.key === 'amount') {
+                if(atrb.value.includes('uatom'))
+                  amount += parseFloat(atrb.value.slice(0,atrb.value.length-5)/1000000)
+                else 
+                  amount += parseFloat(atrb.value.slice(0,atrb.value.length)/1000000)
+              }
+            })
+          }
         })
       })
-      console.log(amount)
       return amount
     },
     redirectTransaction(){
