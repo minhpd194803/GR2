@@ -41,8 +41,12 @@
 
 <script>
 
+import chainDiffrence from '../constant.js'
 import axios from 'axios';
   export default {
+    props:[
+      'chainName',
+    ],
     data(){
       return{
         isFetched: false,
@@ -52,7 +56,7 @@ import axios from 'axios';
     },
     methods:{
       async fetchLatestBlocks(){
-        const res = await axios.get('https://cosmos.rpc.atomscan.com/blockchain?page=')
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].blockFirstLink}.atomscan.com${chainDiffrence[this.chainName].blockSecondLink}/blockchain?page=`)
         this.apiData = res.data.result.block_metas
       },
       convertToTableData(){

@@ -120,7 +120,7 @@ export default {
           }
         })
       })
-      return amount
+      return amount.toFixed(6)
     },
     redirectTransaction(){
       

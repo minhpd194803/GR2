@@ -1,16 +1,16 @@
 <template>
   <div>
     <Navbar :active-index="'1'"/>
-    <ChainInfo/>
-      <div class="table-border table-width-almost-full" >
+    <ChainInfo :chainName="chainName"/>
+      <div class="table-border table-width-almost-full" v-if="chainName === 'Cosmos'" >
         <LatestTransactions/>
       </div>
       <div class="flex">
         <div class="table-border table-width-full">
-          <Validators/>
+          <Validators :chainName="chainName"/>
         </div>
         <div class="table-border table-width-full">
-          <LatestBlock/>
+          <LatestBlock :chainName="chainName"/>
         </div>
       </div>
   </div>
@@ -31,10 +31,18 @@
       Validators,
       LatestBlock,
     },
+    data(){
+      return{
+        chainName: 'Kava'
+      }
+    }
   }
 </script>
 
 <style>
+* {
+  font-family: Verdana, sans-serif !important;
+}
 .table-border{
   padding-top: 10px;
   margin: 20px;

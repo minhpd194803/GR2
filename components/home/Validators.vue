@@ -38,9 +38,13 @@
 </template>
 
 <script>
+  import chainDiffrence from '../constant.js'
   import { mapGetters } from 'vuex';
   import axios from 'axios';
   export default {
+    props:[
+      'chainName',
+    ],
     data(){
       return {
         validators: [],
@@ -54,7 +58,7 @@
     },
     methods:{
       async fetchValidators(){
-        const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/staking/v1beta1/validators?page.offset=1&pagination.limit=500&status=BOND_STATUS_BONDED')
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/staking/v1beta1/validators?page.offset=1&pagination.limit=500&status=BOND_STATUS_BONDED`)
         this.validators = res.data.validators
       },
       getTableData(){

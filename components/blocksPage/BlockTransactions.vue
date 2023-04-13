@@ -162,7 +162,7 @@ export default {
       }
     },
       handleCurrentChange(event){
-        location.replace("http://localhost:3000/transactions/" + event.fullHash)
+        location.replace(`http://localhost:3000/transactions/${event.fullHash}`)
       }
   },
   created(){

@@ -66,15 +66,18 @@
 </template>
 
 <script>
+import chainDiffrence from '../constant.js'
 import { mapActions } from 'vuex';
 import axios from 'axios';
   export default {
+    props:[
+      'chainName'
+    ],
     components:{
       
     },
     data(){
       return {
-        chainName: 'Injective',
         chainInfo: null,
         bondedTokens: 1,
         amountTokens: 1,
@@ -89,20 +92,20 @@ import axios from 'axios';
         this.chainPrice = res.data
       },
       async fetchChainData(){
-        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/base/tendermint/v1beta1/blocks/latest`)
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/base/tendermint/v1beta1/blocks/latest`)
         this.chainInfo = res.data
       },
       async fetchBondedToken(){
-        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/staking/v1beta1/pool`)
-        this.bondedTokens = res.data.pool.bonded_tokens / this.chainDiffrence.unitDivision
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/staking/v1beta1/pool`)
+        this.bondedTokens = res.data.pool.bonded_tokens / chainDiffrence[this.chainName].unitDivision
         this.setBondedTokens(this.bondedTokens)
       },
       async fetchAmountToken(){
-        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/bank/v1beta1/supply/${this.chainDiffrence.unit}`)
-        this.amountTokens = res.data.amount.amount / this.chainDiffrence.unitDivision
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/bank/v1beta1/supply/${chainDiffrence[this.chainName].unit}`)
+        this.amountTokens = res.data.amount.amount / chainDiffrence[this.chainName].unitDivision
       },
       async fetchInflation(){
-        const res = await axios.get(`https://${this.chainDiffrence.firstLink}.atomscan.com${this.chainDiffrence.secondLink}/cosmos/mint/v1beta1/inflation`)
+        const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/mint/v1beta1/inflation`)
         this.inflation = res.data.inflation
       },
       convertBigNumber(number){
@@ -123,8 +126,7 @@ import axios from 'axios';
         return this.toPercentage(this.bondedTokens/this.amountTokens)
       },
       getCurrentChainPrice(){
-        if (this.chainName === 'Injective') return this.chainPrice.inj.price.toFixed(2)
-        if (this.chainName === 'Cosmos') return this.chainPrice.atom.price.toFixed(2)
+        return this.chainPrice[chainDiffrence[this.chainName].secondUnit].price.toFixed(2)
       },
       stakeWidget(){
         const amountTokens = this.convertBigNumber(this.amountTokens)
@@ -146,31 +148,8 @@ import axios from 'axios';
           + '(' + this.stakedPercentage + ')'
       },
       getIcon(){
-        if (this.chainName === "Cosmos"){
-          return 'https://atomscan.com/img/icons/chains/atom.svg'
-        }
-        else if (this.chainName === "Injective"){
-          return 'https://atomscan.com/img/icons/chains/injective.png'
-        }
+        return `https://atomscan.com/img/icons/chains/${chainDiffrence[this.chainName].iconLink}`
       },
-      chainDiffrence(){
-        if (this.chainName === "Cosmos"){
-          return {
-            firstLink: 'cosmos.lcd',
-            secondLink: '',
-            unit: 'uatom',
-            unitDivision: 1000000,
-          }
-        }
-        if (this.chainName === "Injective"){
-          return {
-            firstLink: 'proxy',
-            secondLink: '/inj-lcd',
-            unit: 'inj',
-            unitDivision: 1000000000000000000,
-          }
-        }
-      }
     },
     created(){
       let fetchData = async () => {
