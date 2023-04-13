@@ -97,7 +97,7 @@ export default {
       // convert bytes to hex string                  
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
       return hashHex;
-  }
+    }
   },
   created() {
     let fetchApi = async () => {
