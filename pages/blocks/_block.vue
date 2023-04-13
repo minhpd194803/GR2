@@ -9,7 +9,7 @@
 <script>
 import BlockDetails from '../../components/blocksPage/BlockDetails.vue';
 import Navbar from '../../components/Navbar/Navbar.vue';
-import BlockTransactions from '../../components/blocksPage/blockTransactions/BlockTransactions.vue';
+import BlockTransactions from '../../components/blocksPage/BlockTransactions.vue';
 
 export default {
   async asyncData({ params }) {
