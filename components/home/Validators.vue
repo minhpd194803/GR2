@@ -49,19 +49,33 @@
       return {
         validators: [],
         tableData: [],
-        bondedTokens: 0,
         isFetched: false,
       }
     },
     computed: {
-      ...mapGetters(['getBondedTokens'])
+      bondedTokens(){
+        return this.$store.state.bondedTokens
+      }
+    },
+    watch:{
+      bondedTokens(amount){
+        this.handler(amount)
+      },
     },
     methods:{
       async fetchValidators(){
         const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/staking/v1beta1/validators?page.offset=1&pagination.limit=500&status=BOND_STATUS_BONDED`)
         this.validators = res.data.validators
       },
-      getTableData(){
+      async handler(amount){
+        this.isFetched = false
+        this.tableData = []
+        this.validators = []
+        await this.fetchValidators()
+        await this.getTableData(amount);
+        this.isFetched = true
+      },
+      getTableData(amount){
         let tempdata = this.validators.sort((first,second) => {
           const firstValidator = parseFloat(first.tokens)
           const secondValidator = parseFloat(second.tokens)
@@ -73,42 +87,32 @@
           }
           return 0
         }).slice(0,19)
-        const bondedTokens = this.getBondedTokens
         tempdata.forEach((validator) => {
           let tempValidator = {}
           tempValidator.name = validator.description.moniker
           tempValidator.commission = this.convertCommission(parseFloat(validator.commission.commission_rates.rate))
-          tempValidator.delegations = this.convertDelegations(parseFloat(validator.tokens))
-          tempValidator.power = (validator.tokens/(10000*bondedTokens)).toFixed(2) + '%'
+          tempValidator.delegations = this.convertDelegations(parseFloat(validator.tokens/chainDiffrence[this.chainName].unitDivision))
+          tempValidator.power = (validator.tokens*100/(chainDiffrence[this.chainName].unitDivision*amount)).toFixed(2) + '%'
           this.tableData.push(tempValidator)
         })
-
-      },
-      validatorSort(first,second){
-
       },
       convertCommission(commissionData){
         return (commissionData*100).toFixed(2) + '%'
       },
       convertDelegations(delegationData){
-        if (delegationData > 100000000000000){
-          return (delegationData/1000000000000000).toFixed(2) + 'B'
+        if (delegationData > 100000000){
+          return (delegationData/1000000000).toFixed(2) + 'B'
         }
-        else if (delegationData > 100000000000){
-          return (delegationData/1000000000000).toFixed(2) + 'M'
+        else if (delegationData > 1000000){
+          return (delegationData/1000000).toFixed(2) + 'M'
+        }
+        else if (delegationData > 1000){
+          return (delegationData/1000).toFixed(2) + 'K'
         }
         else
-          return String((delegationData/1000000).toFixed(2))
+          return String((delegationData).toFixed(2))
       },
     },
-    created(){
-      let fetchApi = async () => {
-        await this.fetchValidators()
-        this.getTableData()
-        this.isFetched = true
-      }
-      fetchApi()
-    }
   }
 </script>
 

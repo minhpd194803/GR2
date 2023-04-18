@@ -30,9 +30,14 @@
 <script>
 import axios from 'axios'
 export default {
-  props: [
-    'transactionHash',
-  ],
+  props: {
+    transactionHash: {
+      type: String,
+    },
+    chainName: {
+      type: String,
+    }
+  },
   data() {
     return {
       tableData: [

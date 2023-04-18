@@ -18,13 +18,13 @@ const chainDifference = {
     unit: 'inj',
     secondUnit: 'inj',
     unitDivision: 1000000000000000000,
-    iconLink: 'injective.svg',
+    iconLink: 'injective.png',
   },
   Band: {
     firstLink: 'proxy',
     secondLink: '/band-lcd',
     blockFirstLink: 'proxy',
-    blockSecondLink: '/band-prc',
+    blockSecondLink: '/band-rpc',
     unit: 'uband',
     secondUnit: 'band',
     unitDivision: 10000000,
@@ -49,7 +49,7 @@ const chainDifference = {
     secondUnit: 'kava',
     unitDivision: 1000000,
     iconLink: 'kava.png'
-  }
+  },
 } 
 
 

@@ -41,10 +41,14 @@
 </template>
 
 <script>
+import chainDiffrence from '../constant.js'
 import axios from 'axios'
 export default {
   props: {
     block: {
+      type: String,
+    },
+    chainName: {
       type: String,
     }
   },
@@ -57,7 +61,7 @@ export default {
   },
   methods: {
     async fetchPrice(){
-      const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/tx/v1beta1/txs?events=tx.height=' + this.block)
+      const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/tx/v1beta1/txs?events=tx.height=${this.block}`)
       this.apiData = res.data.tx_responses
     },
     convertToTableData(){

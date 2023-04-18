@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar :active-index="'1'"/>
-    <ChainInfo :chainName="chainName"/>
+    <ChainInfo :chainName="chainName" @change-chain="setChainName"/>
       <div class="table-border table-width-almost-full" v-if="chainName === 'Cosmos'" >
         <LatestTransactions/>
       </div>
@@ -33,7 +33,13 @@
     },
     data(){
       return{
-        chainName: 'Kava'
+        chainName: 'Cosmos'
+      }
+    },
+    methods: {
+      setChainName(name){
+        console.log(name)
+        this.chainName = name
       }
     }
   }

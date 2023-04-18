@@ -16,7 +16,7 @@ export const mutations = {
 }
 
 export const actions = {
-  setBondedTokens(context, payload){
+  async setBondedTokens(context, payload){
     context.commit('setBondedTokens', payload)
   }
 }

@@ -4,10 +4,27 @@
       <el-main>
         <el-row :gutter="20">
           <el-col :span="6">
-            <div class="shadow small-content row align-center">
-              <img :src="getIcon" class="icon">
-              {{ chainName }}
-            </div>
+            <el-dropdown class="shadow small-content row">
+              <span class="row align-center" style="width: 100%">
+                <img :src="getIcon(chainDiffrence[chainName].iconLink)" class="icon">
+                {{ chainName }}
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item 
+                  v-for="(chain, key) in chainDiffrence" 
+                  class="drop-item"
+                >
+                  <div 
+                    class="drop-item" 
+                    v-if="!!chain.iconLink"
+                    @click="changeChain(key)"
+                    >
+                    <img :src="getIcon(chain.iconLink)" class="icon">
+                    {{ key }}
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-col>
           <el-col :span="18" class="shadow small-content row align-center">
             <div>
@@ -78,6 +95,7 @@ import axios from 'axios';
     },
     data(){
       return {
+        chainDiffrence: chainDiffrence,
         chainInfo: null,
         bondedTokens: 1,
         amountTokens: 1,
@@ -115,11 +133,23 @@ import axios from 'axios';
         else if (number > 1000000){
           return (number/1000000).toFixed(2) + 'M'
         }
+        else if (number > 1000){
+          return (number/1000).toFixed(2) + 'K'
+        }
+        else return String((number).toFixed(2))
       },
       toPercentage(Number){
         return (Number * 100).toFixed(2) + '%'
       },
-      ...mapActions(['setBondedTokens'])
+      changeChain(chain){
+        console.log(chain)
+        this.$emit('change-chain',chain)
+      },
+      getIcon(iconLink){
+        console.log(iconLink)
+        return `https://atomscan.com/img/icons/chains/${iconLink}`
+      },
+      ...mapActions(['setBondedTokens']),
     },
     computed:{
       stakedPercentage() {
@@ -147,22 +177,21 @@ import axios from 'axios';
           + this.convertBigNumber(this.bondedTokens) 
           + '(' + this.stakedPercentage + ')'
       },
-      getIcon(){
-        return `https://atomscan.com/img/icons/chains/${chainDiffrence[this.chainName].iconLink}`
-      },
     },
-    created(){
-      let fetchData = async () => {
-        await this.fetchBondedToken()
-        await this.fetchChainData()
-        await this.fetchAmountToken()
-        await this.fetchInflation()
-        await this.fetchPrice()
-        this.isFetched = true
+    watch: {
+      chainName: {
+        async handler() {
+          this.isFetched = false
+          await this.fetchBondedToken()
+          await this.fetchChainData()
+          await this.fetchAmountToken()
+          await this.fetchInflation()
+          await this.fetchPrice()
+          this.isFetched = true
+        },
+        immediate: true,
       }
-      fetchData()
-
-    }
+    },
   }
 
 </script>
@@ -197,8 +226,14 @@ import axios from 'axios';
     align-items: center;
   }
   .icon{
+    margin: 2px;
     height: 24px;
     width: 24px;
   }
-
+  .drop-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
 </style>

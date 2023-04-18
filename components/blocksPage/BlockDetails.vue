@@ -31,11 +31,17 @@
 </template>
 
 <script>
+import chainDiffrence from '../constant.js'
 import axios from 'axios'
 export default {
-  props: [
-    'block',
-  ],
+  props: {
+    block: {
+      type: String,
+    },
+    chainName: {
+      type: String,
+    }
+  },
   data() {
     return {
       tableData: [
@@ -66,7 +72,7 @@ export default {
   },
   methods: {
     async fetchBlock() {
-      const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/base/tendermint/v1beta1/blocks/' + this.block)
+      const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/base/tendermint/v1beta1/blocks/${this.block}`)
       this.apiData = res.data
     },
     async convertToTableData() {

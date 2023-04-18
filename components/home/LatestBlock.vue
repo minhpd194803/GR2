@@ -108,17 +108,22 @@ import axios from 'axios';
         console.log(event)
       },
       handleCurrentChange(event){
-        location.replace("http://localhost:3000/blocks/" + event.height)
+        location.replace(`http://localhost:3000/${this.chainName}/blocks/${event.height}`)
       }
       
     },
-    created(){
-      let fetchApi = async () => {
-        await this.fetchLatestBlocks()
-        this.convertToTableData()
-        this.isFetched = true
+    watch: {
+      chainName: {
+        async handler(){
+          this.isFetched = false
+          this.tableData = []
+          this.apiData = []
+          await this.fetchLatestBlocks()
+          this.convertToTableData()
+          this.isFetched = true
+        },
+        immediate: true,
       }
-      fetchApi()
     },
   }
 </script>
