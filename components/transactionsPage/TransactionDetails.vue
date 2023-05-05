@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import chainDiffrence from '../constant.js'
 import axios from 'axios'
 export default {
   props: {
@@ -80,7 +81,7 @@ export default {
   },
   methods: {
     async fetchTransaction() {
-      const res = await axios.get('https://cosmos.lcd.atomscan.com/cosmos/tx/v1beta1/txs/' + this.transactionHash)
+      const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/tx/v1beta1/txs/${this.transactionHash}`)
       this.apiData = res.data
     },
     convertToTableData() {
@@ -92,9 +93,9 @@ export default {
         : this.apiData.tx_response.raw_log
       this.tableData[3].data = this.apiData.tx_response.height
       this.tableData[4].data = this.convertGas(this.apiData.tx_response.gas_used,this.apiData.tx_response.gas_wanted)
-      this.tableData[5].data = (this.apiData.tx.auth_info.fee.amount[0].amount/1000000).toFixed(6) + ' ATOM'
+      this.tableData[5].data = (this.apiData.tx.auth_info.fee.amount[0].amount/chainDiffrence[this.chainName].unitDivision).toFixed(6) + ' ' + chainDiffrence[this.chainName].secondUnit
       this.tableData[6].data = !!this.apiData.tx.body.memo ? this.apiData.tx.body.memo : 'No Memo' 
-      this.tableData[7].data = this.getTotal() + ' ATOM'
+      this.tableData[7].data = this.getTotal() + ' ' + chainDiffrence[this.chainName].secondUnit
     },
     convertdate(data) {
       let temp = ''
@@ -103,23 +104,21 @@ export default {
       return date
     },
     convertGas(used,wanted){
-      const gasUsed = (used/1000000).toFixed(6)
-      const gasWanted = (wanted/1000000).toFixed(6)
-      return gasUsed + ' ATOM/ ' + gasWanted + ' ATOM'
+      const gasUsed = (used/chainDiffrence[this.chainName].unitDivision).toFixed(6)
+      const gasWanted = (wanted/chainDiffrence[this.chainName].unitDivision).toFixed(6)
+      return gasUsed + ` ${chainDiffrence[this.chainName].secondUnit} / ` + gasWanted + ` ${chainDiffrence[this.chainName].secondUnit} ` 
     },
     getTotal(){
       let amount = 0
       this.apiData.tx_response.logs.forEach((log) => {
         log.events.forEach((evnt) => {
-          console.log('event')
           if(evnt.type === 'coin_received' || evnt.type === 'fungible_token_packet') {
             evnt.attributes.forEach((atrb) => {
-              console.log('hehe')
               if(atrb.key === 'amount') {
-                if(atrb.value.includes('uatom'))
-                  amount += parseFloat(atrb.value.slice(0,atrb.value.length-5)/1000000)
+                if(atrb.value.includes(chainDiffrence[this.chainName].unit))
+                  amount += parseFloat(atrb.value.slice(0,atrb.value.length-5)/chainDiffrence[this.chainName].unitDivision)
                 else 
-                  amount += parseFloat(atrb.value.slice(0,atrb.value.length)/1000000)
+                  amount += parseFloat(atrb.value.slice(0,atrb.value.length)/chainDiffrence[this.chainName].unitDivision)
               }
             })
           }

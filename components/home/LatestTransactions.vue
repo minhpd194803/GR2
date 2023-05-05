@@ -84,6 +84,7 @@ import axios from 'axios';
               total+=message.Amounts[0]
             }
           })
+          tempData.type = tempData.type ?? '--'
           tempData.totalAmount = this.convertAmountOfTokens(total) 
           tempData.since = this.checkTimeSince(data.Time)
           this.tableData.push(tempData)
@@ -128,7 +129,7 @@ import axios from 'axios';
         }
       },
       handleCurrentChange(event){
-        location.replace("http://localhost:3000/transactions/" + event.fullHash)
+        location.replace(`http://localhost:3000/Cosmos/transactions/${event.fullHash}`)
       }
     },
     created(){

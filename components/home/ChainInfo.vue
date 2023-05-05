@@ -146,7 +146,6 @@ import axios from 'axios';
         this.$emit('change-chain',chain)
       },
       getIcon(iconLink){
-        console.log(iconLink)
         return `https://atomscan.com/img/icons/chains/${iconLink}`
       },
       ...mapActions(['setBondedTokens']),

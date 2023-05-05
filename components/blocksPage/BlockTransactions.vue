@@ -114,6 +114,9 @@ export default {
             }
             if(evnt.type === 'coin_received') tempData.to = this.convertLongData(evnt.attributes[0].value)
           })
+          tempData.from = tempData.from || '--'
+          tempData.to = tempData.to || '--'
+          tempData.type = tempData.type ?? '--'
         }
         else {
           tempData.from = '--'
@@ -141,7 +144,7 @@ export default {
       }
     },
     convertAmountOfTokens(amount){
-      return (amount/1000000).toFixed(6) + ' ATOM'
+      return (amount/chainDiffrence[this.chainName].unitDivision).toFixed(6) + chainDiffrence[this.chainName].secondUnit
     },
     checkTimeSince(time){
       const currentHour = new Date().getUTCHours()
@@ -166,7 +169,7 @@ export default {
       }
     },
       handleCurrentChange(event){
-        location.replace(`http://localhost:3000/transactions/${event.fullHash}`)
+        location.replace(`http://localhost:3000/${this.chainName}/transactions/${event.fullHash}`)
       }
   },
   created(){

@@ -9,6 +9,7 @@ const chainDifference = {
     secondUnit: 'atom',
     unitDivision: 1000000,
     iconLink: 'atom.svg',
+    relayer: 'cosmoshub-4',
   },
   Injective: {
     firstLink: 'proxy',
@@ -19,6 +20,7 @@ const chainDifference = {
     secondUnit: 'inj',
     unitDivision: 1000000000000000000,
     iconLink: 'injective.png',
+    relayer: 'injective-1',
   },
   Band: {
     firstLink: 'proxy',
@@ -29,6 +31,7 @@ const chainDifference = {
     secondUnit: 'band',
     unitDivision: 10000000,
     iconLink: 'band.svg',
+    relayer: 'laozi-mainnet',
   },
   Juno: {
     firstLink: 'proxy',
@@ -39,6 +42,7 @@ const chainDifference = {
     secondUnit: 'juno',
     unitDivision: 1000000,
     iconLink: 'juno.svg',
+    relayer: 'juno-1',
   },
   Kava: {
     firstLink: 'proxy',
@@ -48,7 +52,8 @@ const chainDifference = {
     unit: 'ukava',
     secondUnit: 'kava',
     unitDivision: 1000000,
-    iconLink: 'kava.png'
+    iconLink: 'kava.png',
+    relayer: 'kava_2222-10',
   },
 } 
 

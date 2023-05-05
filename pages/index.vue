@@ -1,16 +1,16 @@
 <template>
   <div>
     <Navbar :active-index="'1'"/>
-    <ChainInfo :chainName="chainName" @change-chain="setChainName"/>
-      <div class="table-border table-width-almost-full" v-if="chainName === 'Cosmos'" >
+    <ChainInfo :chainName="getChainName" @change-chain="setChainName"/>
+      <div class="table-border table-width-almost-full" v-if="getChainName === 'Cosmos'" >
         <LatestTransactions/>
       </div>
       <div class="flex">
         <div class="table-border table-width-full">
-          <Validators :chainName="chainName"/>
+          <Validators :chainName="getChainName"/>
         </div>
         <div class="table-border table-width-full">
-          <LatestBlock :chainName="chainName"/>
+          <LatestBlock :chainName="getChainName"/>
         </div>
       </div>
   </div>
@@ -22,6 +22,7 @@
   import LatestTransactions from '../components/home/LatestTransactions.vue';
   import Validators from '../components/home/Validators.vue';
   import LatestBlock from '../components/home/LatestBlock.vue';
+  import { mapGetters } from 'vuex';
   export default {
     name: 'IndexPage',
     components: {
@@ -33,13 +34,15 @@
     },
     data(){
       return{
-        chainName: 'Cosmos'
+
       }
+    },
+    computed: {
+      ...mapGetters(['getChainName']),
     },
     methods: {
       setChainName(name){
-        console.log(name)
-        this.chainName = name
+        this.$store.dispatch('setChainName', name)
       }
     }
   }
