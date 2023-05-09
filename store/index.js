@@ -1,4 +1,3 @@
-
 export const state = () => ({
   chainName: 'Cosmos',
   bondedTokens: 0,

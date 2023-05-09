@@ -39,7 +39,6 @@
 
 <script>
   import chainDiffrence from '../constant.js'
-  import { mapGetters } from 'vuex';
   import axios from 'axios';
   export default {
     props:[

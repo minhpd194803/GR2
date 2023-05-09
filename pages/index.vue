@@ -44,6 +44,9 @@
       setChainName(name){
         this.$store.dispatch('setChainName', name)
       }
+    },
+    mounted(){
+      console.log(this.getChainName)
     }
   }
 </script>
