@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <el-collapse v-model="activeName" accordion v-for="(chain, key) in chainDifference">
-      <el-container v-if="!!chain.iconLink">
-        <el-main v-if="!isLoading">
-          <el-collapse-item :name="key">
+  <div v-if="!isLoading">
+    <el-collapse v-model="activeName" accordion v-for="chain in tableData">
+      <el-container v-if="!!chainDifference[chain.chainName].iconLink">
+        <el-main>
+          <el-collapse-item :name="chain.chainName">
             <template slot="title">
-              <img :src="getIcon(chain.iconLink)" class="icon">
-              {{ key }}
+              <img :src="getIcon(chainDifference[chain.chainName].iconLink)" class="icon">
+              {{ chain.chainName }}
             </template>
-            <el-table>
+            <el-table
+              :data="chain.relayers"
+              stripe
+              style="width: 100%; cursor: pointer;"
+            >
               <el-table-column
                 prop="channelFrom"
                 label="channel">
@@ -63,38 +67,39 @@ export default {
       const res = await axios.get(`https://api.mintscan.io/v2/relayer/${chainDifference[this.getChainName].relayer}/paths`)
       this.apiData = res.data.sendable
     },
-    processData() {
+    async processData() {
       for(let chain in chainDifference){
-        console.log(chain)
         let tempChain = {
           chainName: '',
           relayers: [],
         }
-        for(let data in this.apiData){
+        this.apiData.forEach(data => {
           let tempRelayer = {}
           if( chainDifference[chain].relayer == data.chain_id ){
             // if this chain's id is identicle to this api's chain_id then take all of its relayers
-            for(relayer in data.paths){
+            console.log(data)
+            data.paths.forEach(relayer => {
               // data preprocessing
               tempRelayer.channelFrom = this.getChainName
               tempRelayer.stateFrom = relayer.channel_state
               tempRelayer.channelTo = chain
               tempRelayer.stateTo = relayer.counter_party.channel_state
-              tempRelayer.operationTime = this.processDate(relayer.created_at)
-              const {receive, transfer} = relayer.stats.current.tx_num
-              tempRelayer.txs = receive + transfer
+              tempRelayer.operationTime = this.processDate(relayer.created_at ?? '')
+              let {receive, transfer} = relayer.stats.current.tx_num
+              tempRelayer.txs = Number(receive) + Number(transfer)
               // include this relayer in the tempchain.relayers
               tempChain.relayers.push(tempRelayer)
-            }
+            })
             tempChain.chainName = chain
           }
-        }
+        })
         if(tempChain.chainName){
           this.tableData.push(tempChain)
         }
       }
     },
     processDate(created_at = '2022-01-20') {
+      if (created_at) return '--'
       const dateCreated = new Date(created_at.slice(0,9)).getTime()
       const dateCurrent = new Date().getTime()
       let timeDiffrence = (dateCurrent - dateCreated) / 31536000
