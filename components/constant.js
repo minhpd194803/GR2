@@ -1,10 +1,10 @@
 
 const chainDifference = {
   Cosmos: {
-    firstLink: 'cosmos.lcd',
-    secondLink: '',
-    blockFirstLink: 'cosmos.rpc',
-    blockSecondLink: '',
+    firstLink: 'proxy',
+    secondLink: '/cosmoshub-lcd',
+    blockFirstLink: 'proxy',
+    blockSecondLink: '/cosmoshub-rpc',
     unit: 'uatom',
     secondUnit: 'atom',
     unitDivision: 1000000,

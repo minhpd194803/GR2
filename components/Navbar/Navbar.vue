@@ -4,27 +4,29 @@
       <el-menu-item index="1">Home</el-menu-item>
       <el-menu-item index="2">Transactions</el-menu-item>
       <el-menu-item index="3">Blocks</el-menu-item>
-      <el-submenu index="4">
-        <template slot="title">Relayers</template>
-          <el-menu-item index="4-1">Cosmos</el-menu-item>
-          <el-menu-item index="4-2">Injective</el-menu-item>
-          <el-menu-item index="4-3">Band</el-menu-item>
-          <el-menu-item index="4-4">Juno</el-menu-item>
-          <el-menu-item index="4-5">Kava</el-menu-item>
-      </el-submenu>
+      <el-menu-item index="4">Relayers</el-menu-item>
     </el-menu>
     <div class="line"></div>
   </div>
 </template>
 
 <script>
+  import chainDifference from '../constant.js'
   export default {
     props:[
       'activeIndex'
     ],
+    computed: {
+      chains(){
+        const hehe = chainDifference.map(chain => chain)
+        console.log(hehe)
+        return hehe
+      }
+    },
     methods: {
       handleSelect(key) {
         if(key == 1) location.replace("http://localhost:3000")
+        if(key == 4) location.replace("http://localhost:3000/relayers")
       }
     }
   }

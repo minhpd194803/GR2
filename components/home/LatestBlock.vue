@@ -105,9 +105,6 @@ import axios from 'axios';
         }
       },
       handleCurrentChange(event){
-        console.log(event)
-      },
-      handleCurrentChange(event){
         location.replace(`http://localhost:3000/${this.chainName}/blocks/${event.height}`)
       }
       

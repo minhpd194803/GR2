@@ -12,18 +12,27 @@
               :data="chain.relayers"
               stripe
               style="width: 100%; cursor: pointer;"
+              :default-sort = "{prop: 'transfer', order: 'descending'}"
             >
-              <el-table-column
-                prop="channelFrom"
-                label="channel">
+              <el-table-column prop="channelFrom">
+                <template slot="header">
+                  <div class="icon_center">
+                    <img :src="getIcon(chainDifference[chainName].iconLink)" class="icon"/>
+                    channel
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="stateFrom"
                 label="state">
               </el-table-column>
-              <el-table-column
-                prop="channelTo"
-                label="channel">
+              <el-table-column prop="channelTo">
+                <template slot="header">
+                  <div class="icon_center">
+                    <img :src="getIcon(chainDifference[chain.chainName].iconLink)" class="icon"/>
+                    channel
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="stateTo"
@@ -33,9 +42,15 @@
                 prop="operationTime"
                 label="operationTime">
               </el-table-column>
-              <el-table-column
-                prop="txs"
-                label="Tx last 24h">
+              <el-table-column label="Tx last 24h">
+                <el-table-column
+                  prop="transfer"
+                  label="Transfer">
+                </el-table-column>
+                <el-table-column
+                  prop="receive"
+                  label="Receive">
+                </el-table-column>
               </el-table-column>
             </el-table>
           </el-collapse-item>
@@ -61,6 +76,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getChainName']),
+    chainName(){
+      return this.$store.state.chainName
+    }
   },
   methods: {
     async fetchData() {
@@ -74,19 +92,37 @@ export default {
           relayers: [],
         }
         this.apiData.forEach(data => {
-          let tempRelayer = {}
           if( chainDifference[chain].relayer == data.chain_id ){
             // if this chain's id is identicle to this api's chain_id then take all of its relayers
-            console.log(data)
             data.paths.forEach(relayer => {
               // data preprocessing
-              tempRelayer.channelFrom = this.getChainName
-              tempRelayer.stateFrom = relayer.channel_state
-              tempRelayer.channelTo = chain
-              tempRelayer.stateTo = relayer.counter_party.channel_state
-              tempRelayer.operationTime = this.processDate(relayer.created_at ?? '')
-              let {receive, transfer} = relayer.stats.current.tx_num
-              tempRelayer.txs = Number(receive) + Number(transfer)
+              let tempRelayer = {}
+              // api destructuring
+              let {
+                channel_id: channelFrom,
+                channel_state: stateFrom,
+                counter_party: {
+                  channel_id: channelTo,
+                  channel_state: stateTo,
+                },
+                created_at,
+                stats: {
+                  current: {
+                    tx_num: {
+                      receive,
+                      transfer,
+                    }
+                  }
+                }
+              } = relayer
+
+              tempRelayer.channelFrom = channelFrom
+              tempRelayer.stateFrom = stateFrom
+              tempRelayer.channelTo = channelTo
+              tempRelayer.stateTo = stateTo
+              tempRelayer.operationTime = this.processDate(created_at ?? '')
+              tempRelayer.receive = Number(receive)
+              tempRelayer.transfer = Number(transfer)
               // include this relayer in the tempchain.relayers
               tempChain.relayers.push(tempRelayer)
             })
@@ -98,27 +134,34 @@ export default {
         }
       }
     },
-    processDate(created_at = '2022-01-20') {
-      if (created_at) return '--'
-      const dateCreated = new Date(created_at.slice(0,9)).getTime()
+    processDate(created_at) {
+      if (!created_at) return '--'
+      const dateCreated = new Date(created_at.slice(0,10)).getTime()
       const dateCurrent = new Date().getTime()
-      let timeDiffrence = (dateCurrent - dateCreated) / 31536000
-      if (timeDiffrence > 1) {
-        return timeDiffrence + 'days ago'
+      let timeDiffrence = ((dateCurrent - dateCreated) / 86400000).toFixed(0)
+      if (timeDiffrence > 365) {
+        return (timeDiffrence / 365).toFixed(0) + ' years ago'
       }
       else{
-        return (dateCurrent - dateCreated) / 86400 + 'years ago'
+        return timeDiffrence + ' days ago'
       }
     },
     getIcon(iconLink) {
       return `https://atomscan.com/img/icons/chains/${iconLink}`
     },
   },
-  async created() {
-    this.isLoading = true
-    await this.fetchData()
-    await this.processData()
-    this.isLoading = false
+  watch: {
+    chainName: {
+      async handler(){
+        this.isLoading = true
+        this.tableData = []
+        this.apiData = []
+        await this.fetchData()
+        await this.processData()
+        this.isLoading = false
+      },
+      immediate: true
+    }
   },
 
 }
@@ -129,5 +172,10 @@ export default {
   margin: 2px;
   height: 24px;
   width: 24px;
+}
+.icon_center{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 </style>
