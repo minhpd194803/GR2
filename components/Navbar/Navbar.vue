@@ -1,6 +1,14 @@
 <template>  
   <div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu 
+      :default-active="activeIndex" 
+      class="el-menu-demo sticky"
+      mode="horizontal" 
+      @select="handleSelect"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+    >
       <el-menu-item index="1">Home</el-menu-item>
       <el-menu-item index="2">Transactions</el-menu-item>
       <el-menu-item index="3">Blocks</el-menu-item>
@@ -28,7 +36,25 @@
         if(key == 1) location.replace("http://localhost:3000")
         if(key == 4) location.replace("http://localhost:3000/relayers")
       }
+    },
+    head: {
+      bodyAttrs: {
+        class: 'head'
+      }
     }
   }
 </script>
 
+<style scoped>
+.sticky {
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  top: 0px;
+}
+
+.head{
+  margin: 0px;
+  margin-top: 60px;
+}
+</style>

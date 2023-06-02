@@ -2,7 +2,7 @@
   <transition name=".el-fade-in-linear">
     <el-container v-if="isFetched">
       <el-main>
-        <el-row :gutter="20">
+        <el-row :gutter="40">
           <el-col :span="6">
             <el-dropdown class="shadow small-content row">
               <span class="row align-center" style="width: 100%">
@@ -26,7 +26,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
-          <el-col :span="18" class="shadow small-content row align-center">
+          <el-col :span="18" class="shadow small-content row align-center info-row">
             <div>
               {{ getPrice }}
             </div>
@@ -196,6 +196,9 @@ import axios from 'axios';
 </script>
 
 <style scoped>
+  .info-row{
+    width: calc(75% - 20px);
+  }
   .small-content{
     border-radius: 10px;
     margin-bottom: 10px;
@@ -208,7 +211,8 @@ import axios from 'axios';
     height: 80px;
   }
   .shadow{
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    background-color: white;
   }
   .column{
     display: flex;

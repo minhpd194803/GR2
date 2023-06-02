@@ -124,6 +124,7 @@ export default {
           }
         })
       })
+      if(!amount) return 0.000000
       return amount.toFixed(6)
     },
     redirectTransaction(){

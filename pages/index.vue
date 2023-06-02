@@ -1,7 +1,8 @@
 <template>
   <div>
     <Navbar :active-index="'1'"/>
-    <ChainInfo :chainName="getChainName" @change-chain="setChainName"/>
+    <div>
+      <ChainInfo :chainName="getChainName" @change-chain="setChainName"/>
       <div class="table-border table-width-almost-full" v-if="getChainName === 'Cosmos'" >
         <LatestTransactions/>
       </div>
@@ -13,6 +14,7 @@
           <LatestBlock :chainName="getChainName"/>
         </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -47,7 +49,7 @@
     },
     mounted(){
       console.log(this.getChainName)
-    }
+    },
   }
 </script>
 
