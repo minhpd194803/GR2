@@ -98,7 +98,7 @@ import axios from 'axios';
         chainDiffrence: chainDiffrence,
         chainInfo: null,
         bondedTokens: 1,
-        amountTokens: 1,
+        amountTokens: 0,
         inflation: 0,
         chainPrice: [],
         isFetched: false,
@@ -183,9 +183,12 @@ import axios from 'axios';
           this.isFetched = false
           await this.fetchBondedToken()
           await this.fetchChainData()
-          await this.fetchAmountToken()
           await this.fetchInflation()
           await this.fetchPrice()
+          this.amountTokens = this.chainPrice[chainDiffrence[this.chainName].secondUnit].cmc.max_supply
+          if (this.amountTokens === 0) {
+            await this.fetchAmountToken()
+          }
           this.isFetched = true
         },
         immediate: true,

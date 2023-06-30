@@ -9,7 +9,7 @@ export default {
       lang: 'en'
     },
     bodyAttrs: {
-      style: 'margin: 0px; margin-top: 60px;'
+      style: 'margin: 0px; margin-top: 60px; background-color: #faf2f2'
     },
     meta: [
       { charset: 'utf-8' },

@@ -55,17 +55,19 @@ export default {
   data(){
     return{
       isFetched: false,
-      apiData: [],
+      txResponse: [],
+      txs: [],
       tableData: [],
     }
   },
   methods: {
     async fetchPrice(){
       const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/tx/v1beta1/txs?events=tx.height=${this.block}`)
-      this.apiData = res.data.tx_responses
+      this.txResponse = res.data.tx_responses
+      this.txs = res.data.txs
     },
     convertToTableData(){
-      this.apiData.forEach((tx) => {
+      this.txResponse.forEach((tx,index) => {
         let tempData = {}
         tempData.type = null
         let totalAmount = 0
@@ -118,11 +120,8 @@ export default {
           tempData.to = tempData.to || '--'
           tempData.type = tempData.type ?? '--'
         }
-        else {
-          tempData.from = '--'
-          tempData.to = '--'
-          tempData.type = 'Failed'
-        }
+        tempData.from = this.convertLongData(this.txs[index].body.messages[0].grantee) ?? tempData.from
+        tempData.type = tempData.type ?? 'Failed'
         tempData.totalAmount = this.convertAmountOfTokens(totalAmount)
         tempData.since = this.checkTimeSince(tx.timestamp)
         if(tempData.type === null) tempData.type = 'Send'
@@ -140,7 +139,7 @@ export default {
         return modifiedData
       }
       else{
-        return '--'
+        return ''
       }
     },
     convertAmountOfTokens(amount){
@@ -194,5 +193,6 @@ export default {
   margin: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 10px;
+  background-color: white;
 }
 </style>

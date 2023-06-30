@@ -13,6 +13,7 @@
       <el-menu-item index="2">Transactions</el-menu-item>
       <el-menu-item index="3">Blocks</el-menu-item>
       <el-menu-item index="4">Relayers</el-menu-item>
+      <el-menu-item index="5">IBC map</el-menu-item>
     </el-menu>
     <div class="line"></div>
   </div>
@@ -35,6 +36,7 @@
       handleSelect(key) {
         if(key == 1) location.replace("http://localhost:3000")
         if(key == 4) location.replace("http://localhost:3000/relayers")
+        if(key == 5) location.replace("http://localhost:3000/map")
       }
     },
     head: {

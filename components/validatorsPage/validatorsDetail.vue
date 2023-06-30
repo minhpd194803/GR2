@@ -112,5 +112,6 @@ export default {
   margin: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 10px;
+  background-color: white;
 }
 </style>

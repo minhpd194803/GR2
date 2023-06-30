@@ -2,7 +2,7 @@
   <div v-if="!isLoading">
     <el-collapse v-model="activeName" accordion v-for="chain in tableData">
       <el-container v-if="!!chainDifference[chain.chainName].iconLink">
-        <el-main>
+        <el-main style="background-color: white;">
           <el-collapse-item :name="chain.chainName">
             <template slot="title">
               <img :src="getIcon(chainDifference[chain.chainName].iconLink)" class="icon">
