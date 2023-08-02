@@ -1,6 +1,7 @@
 <template>
   <div class="table-border">
-    <transition name="el-zoom-in-top">
+    <div v-if="chainName == 'Kujira'"> If this block is on Kujira, the transaction indexing of this chain is disabled so you cant see any transactions.</div>
+    <transition name="el-zoom-in-top" v-else>
       <el-table
         v-show="this.isFetched"
         :data="tableData"
@@ -143,6 +144,9 @@ export default {
       }
     },
     convertAmountOfTokens(amount){
+      if(String(amount) == 'NaN' || amount > 1000000000) {
+        return (0.000000).toFixed(6) + chainDiffrence[this.chainName].secondUnit
+      }
       return (amount/chainDiffrence[this.chainName].unitDivision).toFixed(6) + chainDiffrence[this.chainName].secondUnit
     },
     checkTimeSince(time){

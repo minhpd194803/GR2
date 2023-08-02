@@ -58,7 +58,7 @@ import axios from 'axios';
       }
     },
     methods:{
-      async fetchPrice(){
+      async fetchTransactions(){
         const res = await axios.get('https://index.atomscan.com/transactions?')
         this.apiData = res.data.transactions
       },
@@ -134,7 +134,7 @@ import axios from 'axios';
     },
     created(){
       let fetchApi = async () => {
-        await this.fetchPrice()
+        await this.fetchTransactions()
         this.convertToTableData()
         this.isFetched = true
       }

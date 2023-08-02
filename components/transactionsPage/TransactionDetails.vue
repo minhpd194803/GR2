@@ -93,14 +93,16 @@ export default {
         : this.apiData.tx_response.raw_log
       this.tableData[3].data = this.apiData.tx_response.height
       this.tableData[4].data = this.convertGas(this.apiData.tx_response.gas_used,this.apiData.tx_response.gas_wanted)
-      this.tableData[5].data = (this.apiData.tx.auth_info.fee.amount[0].amount/chainDiffrence[this.chainName].unitDivision).toFixed(6) + ' ' + chainDiffrence[this.chainName].secondUnit
+      
+      this.tableData[5].data = this.apiData.tx.auth_info.fee.amount[0] ? (this.apiData.tx.auth_info.fee.amount[0].amount/chainDiffrence[this.chainName].unitDivision).toFixed(6) : '0' 
+      this.tableData[5].data += ' ' + chainDiffrence[this.chainName].secondUnit
       this.tableData[6].data = !!this.apiData.tx.body.memo ? this.apiData.tx.body.memo : 'No Memo' 
       this.tableData[7].data = this.getTotal() + ' ' + chainDiffrence[this.chainName].secondUnit
     },
     convertdate(data) {
       let temp = ''
       temp = data
-      const date = temp.slice(0,9) + ' ' +temp.slice(11,19)
+      const date = temp.slice(0,10) + ' ' +temp.slice(11,19)
       return date
     },
     convertGas(used,wanted){
@@ -127,9 +129,6 @@ export default {
       if(!amount) return 0.000000
       return amount.toFixed(6)
     },
-    redirectTransaction(){
-      
-    }
   },
   created() {
     let fetchApi = async () => {
@@ -147,6 +146,7 @@ export default {
   width: calc(100%-60px);
   padding: 10px;
   margin: 20px;
+  margin-top: 80px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 10px;
   background-color: white;

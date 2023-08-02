@@ -87,7 +87,7 @@ export default {
     convertdate(data) {
       let temp = ''
       temp = data
-      const date = temp.slice(0,9) + ' ' +temp.slice(11,19)
+      const date = temp.slice(0,10) + ' ' +temp.slice(11,19)
       return date
     },
     async sha256(message) {
@@ -121,6 +121,7 @@ export default {
   width: calc(100%-60px);
   padding: 10px;
   margin: 20px;
+  margin-top: 80px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 10px;
     background-color: white;

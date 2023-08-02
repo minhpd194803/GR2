@@ -123,6 +123,9 @@ import axios from 'axios';
         this.amountTokens = res.data.amount.amount / chainDiffrence[this.chainName].unitDivision
       },
       async fetchInflation(){
+        if(this.chainName == 'Stride' || this.chainName == 'Osmosis') {
+          return;
+        }
         const res = await axios.get(`https://${chainDiffrence[this.chainName].firstLink}.atomscan.com${chainDiffrence[this.chainName].secondLink}/cosmos/mint/v1beta1/inflation`)
         this.inflation = res.data.inflation
       },
@@ -180,6 +183,7 @@ import axios from 'axios';
     watch: {
       chainName: {
         async handler() {
+          this.inflation = 0;
           this.isFetched = false
           await this.fetchBondedToken()
           await this.fetchChainData()
@@ -214,7 +218,7 @@ import axios from 'axios';
     height: 80px;
   }
   .shadow{
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     background-color: white;
   }
   .column{
