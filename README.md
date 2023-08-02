@@ -8,7 +8,10 @@ This was a small project for the course graduation research 2, inspired by the e
 # install dependencies
 $ npm install
 
-# serve with hot reload at localhost:3000
+# build code
+$ npm run build
+
+# run code on local
 $ npm run dev
 ```
 
@@ -20,16 +23,5 @@ This project presents a basic explorer for the chain cosmos, minor changes to th
 
 ## backend
 
-The backend of this explorer was provided by coingecko and atomscans.
+The backend of this explorer was provided by Mintscan and Atomscans.
 
-## future improvements
-
-The navbar currently exist only to navigate back home, it cannot navigate anywhere else, this could be solved with a simple search engine to look for other transactions or blocks. 
-
-The validators at the moment has no details and upon clicking does nothing at all. The validators detail page could be the next functional improvement.
-
-Currently, the only chain that is incoperated is cosmos. To get more chains, the project only needs to have a few minor changes but time consuming effort to reach.
-
-coinGecko provides alot of api and functional graphs which could be exploited to make the explorer more appealing to the eye, expecially the graphs.
-
-Lastly, the website is a little bit clunky, it would be much better if more animations would slide things in.
